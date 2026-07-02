@@ -1,0 +1,8 @@
+implementation/.venv/
+implementation/__pycache__/
+implementation/tests/__pycache__/
+implementation/.pytest_cache/
+implementation/.env
+implementation/demo-day26.mov
+*.pyc
+.DS_Store

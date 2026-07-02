@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "sqlite-lab": {
+      "type": "stdio",
+      "command": "/Users/tvtnoname/Documents/AI - Thực chiến Phase 2/Ngày 26/Day26-Track3-2A202600605-TranVanToan/implementation/.venv/bin/python",
+      "args": [
+        "/Users/tvtnoname/Documents/AI - Thực chiến Phase 2/Ngày 26/Day26-Track3-2A202600605-TranVanToan/implementation/mcp_server.py"
+      ],
+      "env": {
+        "DB_TYPE": "sqlite",
+        "SQLITE_PATH": "/Users/tvtnoname/Documents/AI - Thực chiến Phase 2/Ngày 26/Day26-Track3-2A202600605-TranVanToan/implementation/sqlite_lab.db"
+      }
+    }
+  }
+}

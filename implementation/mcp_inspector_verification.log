@@ -1,0 +1,345 @@
+===================================================================
+MCP INSPECTOR CLI VERIFICATION LOG
+Server: python mcp_server.py (stdio transport)
+Date: Thu Jul  2 13:13:27 +07 2026
+===================================================================
+
+### 1. tools/list ###
+{
+  "tools": [
+    {
+      "name": "search",
+      "description": "Search and query records in the database with filtering, ordering, and pagination.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "table": {
+            "type": "string",
+            "description": "Name of the database table to query."
+          },
+          "filters": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Filters to apply. Can be a dictionary of equality pairs {col: val} or list of dicts/tuples [col, op, val]."
+          },
+          "columns": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "List of specific columns to return. Defaults to all columns (*)."
+          },
+          "limit": {
+            "default": 20,
+            "type": "integer",
+            "description": "Maximum number of records to return. Defaults to 20."
+          },
+          "offset": {
+            "default": 0,
+            "type": "integer",
+            "description": "Offset for pagination. Defaults to 0."
+          },
+          "order_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Column name to sort the results by."
+          },
+          "descending": {
+            "default": false,
+            "type": "boolean",
+            "description": "Sort in descending order if True, otherwise ascending."
+          }
+        },
+        "required": [
+          "table"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "items": {},
+            "type": "array"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "x-fastmcp-wrap-result": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "name": "insert",
+      "description": "Insert a new row into the specified table.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "table": {
+            "type": "string",
+            "description": "Name of the table."
+          },
+          "values": {
+            "additionalProperties": true,
+            "type": "object",
+            "description": "Dictionary mapping columns to their corresponding values."
+          }
+        },
+        "required": [
+          "table",
+          "values"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "additionalProperties": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    },
+    {
+      "name": "aggregate",
+      "description": "Calculate aggregates (COUNT, AVG, SUM, MIN, MAX) with optional grouping and filtering.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "table": {
+            "type": "string",
+            "description": "Name of the table."
+          },
+          "metric": {
+            "type": "string",
+            "description": "Aggregate function to execute ('count', 'avg', 'sum', 'min', 'max')."
+          },
+          "column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Column to apply the metric on. (Optional for 'count', required for others)."
+          },
+          "filters": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Filters to apply before aggregation."
+          },
+          "group_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Column name or list of columns to group the aggregation results by."
+          }
+        },
+        "required": [
+          "table",
+          "metric"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "items": {},
+            "type": "array"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "x-fastmcp-wrap-result": true
+      },
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    }
+  ]
+}
+### 2. resources/list ###
+{
+  "resources": [
+    {
+      "name": "database_schema",
+      "uri": "schema://database",
+      "description": "Read the schema of all user tables in the database.",
+      "mimeType": "text/plain",
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    }
+  ]
+}
+### 3. resources/templates/list ###
+{
+  "resourceTemplates": [
+    {
+      "name": "table_schema",
+      "uriTemplate": "schema://table/{table_name}",
+      "description": "Read the schema of a specific table.",
+      "mimeType": "text/plain",
+      "_meta": {
+        "fastmcp": {
+          "tags": []
+        }
+      }
+    }
+  ]
+}
+### 4. tools/call search (valid: cohort=A1) ###
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "[{\"id\":1,\"name\":\"Alice Smith\",\"cohort\":\"A1\",\"email\":\"alice@example.com\"},{\"id\":2,\"name\":\"Bob Johnson\",\"cohort\":\"A1\",\"email\":\"bob@example.com\"}]"
+    }
+  ],
+  "structuredContent": {
+    "result": [
+      {
+        "id": 1,
+        "name": "Alice Smith",
+        "cohort": "A1",
+        "email": "alice@example.com"
+      },
+      {
+        "id": 2,
+        "name": "Bob Johnson",
+        "cohort": "A1",
+        "email": "bob@example.com"
+      }
+    ]
+  },
+  "isError": false
+}
+### 5. tools/call aggregate (valid: count) ###
+{
+  "_meta": {
+    "fastmcp": {
+      "wrap_result": true
+    }
+  },
+  "content": [
+    {
+      "type": "text",
+      "text": "[{\"value\":5}]"
+    }
+  ],
+  "structuredContent": {
+    "result": [
+      {
+        "value": 5
+      }
+    ]
+  },
+  "isError": false
+}
+### 6. tools/call search (INVALID: unknown table 'hackers') ###
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Error calling tool 'search': Table 'hackers' does not exist in database."
+    }
+  ],
+  "isError": true
+}
+### 7. tools/call aggregate (INVALID: bad metric) ###
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Error calling tool 'aggregate': Unsupported aggregate metric 'drop_db'."
+    }
+  ],
+  "isError": true
+}
+### 8. resources/read schema://database ###
+{
+  "contents": [
+    {
+      "uri": "schema://database",
+      "mimeType": "text/plain",
+      "text": "{\n  \"students\": {\n    \"id\": \"INTEGER\",\n    \"name\": \"TEXT\",\n    \"cohort\": \"TEXT\",\n    \"email\": \"TEXT\"\n  },\n  \"courses\": {\n    \"id\": \"INTEGER\",\n    \"title\": \"TEXT\",\n    \"instructor\": \"TEXT\"\n  },\n  \"enrollments\": {\n    \"student_id\": \"INTEGER\",\n    \"course_id\": \"INTEGER\",\n    \"score\": \"REAL\"\n  }\n}"
+    }
+  ]
+}
+### 9. resources/read schema://table/students ###
+{
+  "contents": [
+    {
+      "uri": "schema://table/students",
+      "mimeType": "text/plain",
+      "text": "{\n  \"students\": {\n    \"id\": \"INTEGER\",\n    \"name\": \"TEXT\",\n    \"cohort\": \"TEXT\",\n    \"email\": \"TEXT\"\n  }\n}"
+    }
+  ]
+}
